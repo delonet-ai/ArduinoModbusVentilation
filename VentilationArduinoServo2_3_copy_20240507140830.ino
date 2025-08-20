@@ -1,13 +1,9 @@
-#include <Adafruit_PWMServoDriver.h>
-#include <ServoDriverSmooth.h>
 #include <ServoSmooth.h>
-#include <smoothUtil.h>
 #include <EEPROM.h>
 
-//RS-485 Modbus Slave (Arduino UNO)
-//Circuit Digest
-#include<ModbusRtu.h>       //Library for using Modbus in Arduino
-#include <Servo.h>          //Library for using Servo Motor
+// RS-485 Modbus Slave (Arduino UNO)
+// Circuit Digest
+#include <ModbusRtu.h>       // Library for using Modbus in Arduino
 
 
 ServoSmooth servo0; 
@@ -35,9 +31,8 @@ const int SERVO_COUNT = 10;
 const int EEPROM_SERVO_BASE = 100;     // separate area to avoid Modbus bytes
 const uint8_t EEPROM_MAGIC = 0xA5;     // marker for initialized storage
 
-// Track last Modbus snapshot to update E-group only on change
-uint16_t last_mb[5] = {0,0,0,0,0};
-bool mb_inited = false;
+// Track last Modbus snapshot to update servos only on change
+uint16_t last_mb[SERVO_COUNT] = {0};
 
 // Helpers
 void loadTargetsFromEEPROM();
@@ -47,12 +42,10 @@ void restoreAll();
 void resetServos();
 
                     //Initilize servo object for class Servo
-Modbus bus;   
-const int arraySize = 5;         //Столько же, сколько адресов             
-const int EEPROM_ADDRESS = 0;// Адрес в EEPROM, где хранится массив
-uint16_t modbus_array[arraySize];    //первоначально в массив записываем нулевые значения
-//uint32_t tmr1;        //таймер  
-//unsigned long sec = millis();; 
+Modbus bus;
+const int arraySize = SERVO_COUNT;         // Количество Modbus регистров для сервоприводов
+const int EEPROM_ADDRESS = 0;              // Адрес в EEPROM, где хранится массив
+uint16_t modbus_array[arraySize] = {0};    // Текущие значения регистров Modbus
 
 void handleSerial() {
   if (!Serial.available()) return;
@@ -258,44 +251,16 @@ void loop()
 
   handleSerial();
 
-   bus.poll(modbus_array,sizeof(modbus_array)/sizeof(modbus_array[0]));  //Used to receive or write value from Master 
-    // Сохраняем массив в EEPROM
-for (int b = 0; b < arraySize; b++)
-{
+  bus.poll(modbus_array, arraySize);  // Receive/write values from master
 
-if (EEPROM.read(EEPROM_ADDRESS +b) != modbus_array[b])
-{
-  EEPROM.update(EEPROM_ADDRESS + b, modbus_array[b]);
-Serial.print(modbus_array[b]);
-Serial.println(""); 
-}
-else {};
-} //for
+  // Сохраняем массив регистров в EEPROM при изменении
+  for (int b = 0; b < arraySize; b++) {
+    if (EEPROM.read(EEPROM_ADDRESS + b) != modbus_array[b]) {
+      EEPROM.update(EEPROM_ADDRESS + b, modbus_array[b]);
+    }
+  }
 
- //else
- // Serial.print("Channel 0-> ");
-  //Serial.print(modbus_array[0]);
- // Serial.println(""); 
-
-  //   Serial.print("Channel 1-> ");
-  // Serial.print(modbus_array[1]);
- // Serial.println(""); 
-
- //   Serial.print("Channel 2-> ");
-  //Serial.print(modbus_array[2]);
- // Serial.println(""); 
-
- //   Serial.print("Channel 3-> ");
- // Serial.print(modbus_array[3]);
- // Serial.println(""); 
-
-   // Serial.print("Channel 4-> ");
-  //Serial.print(modbus_array[4]);
-  //Serial.println(""); 
- //Вывод данных для дебага
-   
- 
-//Записываем данные регистров в значение переменной (нормализация 0..N → 0..180)
+  // Нормализация значений 0..N → 0..180°
   auto toDeg = [](uint16_t v) -> int {
     if (v <= 100)   return (int)(v * 1.8);        // 0..100 → 0..180°
     if (v <= 255)   return (int)((v * 180) / 255); // 0..255 → 0..180°
@@ -305,61 +270,24 @@ else {};
     return 180;                                    // защита
   };
 
-  // Обновляем цели для E-группы ТОЛЬКО при изменении регистров Modbus
+  // Обновляем цели только при изменении Modbus регистров
   bool mbChanged = false;
   for (int i = 0; i < arraySize; i++) {
     if (modbus_array[i] != last_mb[i]) { mbChanged = true; break; }
   }
   if (mbChanged) {
-    for (int i = 0; i < arraySize; i++) last_mb[i] = modbus_array[i];
-    int pwms0 = toDeg(modbus_array[0]);
-    int pwms1 = toDeg(modbus_array[1]);
-    int pwms2 = toDeg(modbus_array[2]);
-    int pwms3 = toDeg(modbus_array[3]);
-    int pwms4 = toDeg(modbus_array[4]);
-    targets[0] = pwms0; targets[1] = pwms1; targets[2] = pwms2; targets[3] = pwms3; targets[4] = pwms4;
+    for (int i = 0; i < arraySize; i++) {
+      last_mb[i] = modbus_array[i];
+      targets[i] = toDeg(modbus_array[i]);
+    }
     saveTargetsToEEPROM();
   }
 
- //Попытка чтобы сервы попорачивались по очереди
-//sec = modbus_array[0];
-//if (sec> 900)  sec = millis();
-
-//if (millis() - sec < 5000) {
-//    servo0.setTargetDeg(pwms4); 
-//   Serial.print("1-> ");
-//   Serial.print(pwms4);
-//   Serial.print("/");
-//   Serial.print(modbus_array[4]);
-//   Serial.print("/");
-// Serial.println(""); 
- //    sec = millis(); 
- // } else { }
-
-
-//Поворачиваем сервы на установленный угол
- servo0.setTargetDeg(targets[0]);
- servo1.setTargetDeg(targets[1]);
- servo2.setTargetDeg(targets[2]);
- servo3.setTargetDeg(targets[3]);
- servo4.setTargetDeg(targets[4]);    	
- servo5.setTargetDeg(targets[5]);
- servo6.setTargetDeg(targets[6]);
- servo7.setTargetDeg(targets[7]);
- servo8.setTargetDeg(targets[8]);
- servo9.setTargetDeg(targets[9]);
-
- // Теперь один тик после установки целей, чтобы не было "рывка" на старте
- servo0.tick();
- servo1.tick();
- servo2.tick();
- servo3.tick();
- servo4.tick();
- servo5.tick();
- servo6.tick();
- servo7.tick();
- servo8.tick();
- servo9.tick();
+  // Обновляем положения сервоприводов
+  applyTargetsToServos(false);
+  for (int i = 0; i < SERVO_COUNT; i++) {
+    getServoPtr(i)->tick();
+  }
 
   // Компактный вывод позиций всех серв в одной строке
   if (millis() - lastPrintMs >= 500) {
