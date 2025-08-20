@@ -116,61 +116,61 @@ void setup(){
   Serial.begin(115200);
 
   //Servo0 setup
-  servo0.attach(8, 450, 2200); //для  futaba s3003
+  servo0.attach(8, 100, 2500); 
   servo0.setSpeed(50);   // ограничить скорость
   servo0.setAccel(0.1);   // установить ускорение (разгон и торможение)
   //Servo 0 end settup
 
   //Servo1 setup
-  servo1.attach(9, 200, 2000); //для BMS-620
+  servo1.attach(9, 100, 2500); 
   servo1.setSpeed(50);   // ограничить скорость
   servo1.setAccel(0.1);   // установить ускорение (разгон и торможение)
   //Servo 1 end settup
 
   //Servo2 setup
-  servo2.attach(10, 450, 2250);
+  servo2.attach(10, 100, 2500);
   servo2.setSpeed(50);   // ограничить скорость
   servo2.setAccel(0.1);   // установить ускорение (разгон и торможение)
   //Servo 2 end settup
 
   //Servo3 setup
-  servo3.attach(11, 450, 2250);
+  servo3.attach(11, 100, 2500);
   servo3.setSpeed(50);   // ограничить скорость
   servo3.setAccel(0.1);   // установить ускорение (разгон и торможение)
   //Servo 3 end settup
 
   //Servo4 setup
-  servo4.attach(12, 450, 2250);
+  servo4.attach(12, 100, 2500);
   servo4.setSpeed(50);   // ограничить скорость
   servo4.setAccel(0.1);   // установить ускорение (разгон и торможение)
   //Servo 4 end settup
  
   //Servo5 setup (впуск A0)
-  servo5.attach(A0, 450, 2250);
+  servo5.attach(A0, 100, 2500);
   servo5.setSpeed(50);
   servo5.setAccel(0.1);
   //Servo 5 end setup
 
   //Servo6 setup (впуск A1)
-  servo6.attach(A1, 450, 2250);
+  servo6.attach(A1, 100, 2500);
   servo6.setSpeed(50);
   servo6.setAccel(0.1);
   //Servo 6 end setup
 
   //Servo7 setup (впуск A2)
-  servo7.attach(A2, 450, 2250);
+  servo7.attach(A2, 100, 2500);
   servo7.setSpeed(50);
   servo7.setAccel(0.1);
   //Servo 7 end setup
 
   //Servo8 setup (впуск A3)
-  servo8.attach(A3, 450, 2250);
+  servo8.attach(A3, 100, 2500);
   servo8.setSpeed(50);
   servo8.setAccel(0.1);
   //Servo 8 end setup
 
   //Servo9 setup (впуск A4)
-  servo9.attach(A4, 450, 2250);
+  servo9.attach(A4, 100, 2500);
   servo9.setSpeed(50);
   servo9.setAccel(0.1);
   //Servo 9 end setup
