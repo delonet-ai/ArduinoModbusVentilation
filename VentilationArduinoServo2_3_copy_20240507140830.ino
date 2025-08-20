@@ -44,6 +44,7 @@ void loadTargetsFromEEPROM();
 void saveTargetsToEEPROM();
 void applyTargetsToServos(bool setCurrentToo);
 void restoreAll();
+void resetServos();
 
                     //Initilize servo object for class Servo
 Modbus bus;   
@@ -66,10 +67,17 @@ String cmd = Serial.readStringUntil('\n');
     return;
   }
 
-  if (cmd.startsWith("ALL")) {
-    int val = cmd.substring(3).toInt();
+  if (cmd == F("RESET")) {
+    resetServos();
+    Serial.println(F("OK RESET"));
+    return;
+  }
+
+  if (cmd.startsWith("ALL") || cmd.startsWith("SETALL")) {
+    int off = cmd.startsWith("SETALL") ? 6 : 3;
+    int val = cmd.substring(off).toInt();
     val = constrain(val, 0, 180);
-    for (int i = 0; i < 10; i++) targets[i] = val;
+    for (int i = 0; i < SERVO_COUNT; i++) targets[i] = val;
     saveTargetsToEEPROM();
     Serial.println(F("OK ALL"));
     return;
@@ -100,7 +108,7 @@ String cmd = Serial.readStringUntil('\n');
   } else if (type == 'I') {
     if (idx >= 0 && idx < 5) gi = 5 + idx;
   } else if (type == 'S') {
-    if (idx >= 0 && idx < 10) gi = idx;
+    if (idx >= 0 && idx < SERVO_COUNT) gi = idx;
   }
 
   if (gi >= 0) {
@@ -158,6 +166,12 @@ void restoreAll() {
   saveTargetsToEEPROM();
   // также сбросим «модбас‑регистры» в EEPROM на 0
   for (int b = 0; b < arraySize; b++) EEPROM.update(EEPROM_ADDRESS + b, 0);
+  applyTargetsToServos(false);
+}
+
+void resetServos() {
+  for (int i = 0; i < SERVO_COUNT; i++) targets[i] = 0;
+  saveTargetsToEEPROM();
   applyTargetsToServos(false);
 }
 
