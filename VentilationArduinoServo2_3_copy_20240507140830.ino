@@ -154,6 +154,16 @@ void applyTargetsToServos(bool setCurrentToo) {
   }
 }
 
+// Выводит текущие значения Modbus-регистров в Serial для отладки
+void printModbusData() {
+  Serial.print(F("MB:"));
+  for (int i = 0; i < arraySize; i++) {
+    Serial.print(' ');
+    Serial.print(modbus_array[i]);
+  }
+  Serial.println();
+}
+
 void restoreAll() {
   for (int i = 0; i < SERVO_COUNT; i++) targets[i] = 0;
   saveTargetsToEEPROM();
@@ -276,6 +286,9 @@ void loop()
     if (modbus_array[i] != last_mb[i]) { mbChanged = true; break; }
   }
   if (mbChanged) {
+codex/clean-unused-code-and-add-comments-ww1g7n
+    printModbusData();            // показать свежие значения Modbus
+main
     for (int i = 0; i < arraySize; i++) {
       last_mb[i] = modbus_array[i];
       targets[i] = toDeg(modbus_array[i]);
