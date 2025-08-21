@@ -38,9 +38,9 @@ void resetServos();
 
                     //Initilize servo object for class Servo
 Modbus bus;
-const int arraySize = SERVO_COUNT;         // Количество Modbus регистров для сервоприводов
+const int arraySize = 10;         // Количество Modbus регистров для сервоприводов
 const int EEPROM_ADDRESS = 0;              // Адрес в EEPROM, где хранится массив
-uint16_t modbus_array[arraySize] = {0};    // Текущие значения регистров Modbus
+uint16_t modbus_array[arraySize];    // Текущие значения регистров Modbus
 
 // --- helpers implementation ---
 static ServoSmooth* getServoPtr(int i) {
@@ -186,13 +186,6 @@ void loop()
 
   bus.poll(modbus_array, arraySize);  // Receive/write values from master
 
-  // Сохраняем массив регистров в EEPROM при изменении
-  for (int b = 0; b < arraySize; b++) {
-    if (EEPROM.read(EEPROM_ADDRESS + b) != modbus_array[b]) {
-      EEPROM.update(EEPROM_ADDRESS + b, modbus_array[b]);
-    }
-  }
-
   // Нормализация значений 0..N → 0..180°
   auto toDeg = [](uint16_t v) -> int {
     if (v <= 100)   return (int)(v * 1.8);        // 0..100 → 0..180°
@@ -203,17 +196,29 @@ void loop()
     return 180;                                    // защита
   };
 
-  // Обновляем цели только при изменении Modbus регистров
+  // Обновляем все 10 целей из Modbus-регистров
+  targets[0] = toDeg(modbus_array[0]);
+  targets[1] = toDeg(modbus_array[1]);
+  targets[2] = toDeg(modbus_array[2]);
+  targets[3] = toDeg(modbus_array[3]);
+  targets[4] = toDeg(modbus_array[4]);
+  targets[5] = toDeg(modbus_array[5]);
+  targets[6] = toDeg(modbus_array[6]);
+  targets[7] = toDeg(modbus_array[7]);
+  targets[8] = toDeg(modbus_array[8]);
+  targets[9] = toDeg(modbus_array[9]);
+
+  // Сохраняем массив регистров в EEPROM при изменении
   bool mbChanged = false;
-  for (int i = 0; i < arraySize; i++) {
-    if (modbus_array[i] != last_mb[i]) { mbChanged = true; break; }
+  for (int b = 0; b < arraySize; b++) {
+    if (modbus_array[b] != last_mb[b]) {
+      mbChanged = true;
+      last_mb[b] = modbus_array[b];
+      EEPROM.update(EEPROM_ADDRESS + b, modbus_array[b]);
+    }
   }
   if (mbChanged) {
     printModbusData();            // показать свежие значения Modbus
-    for (int i = 0; i < arraySize; i++) {
-      last_mb[i] = modbus_array[i];
-      targets[i] = toDeg(modbus_array[i]);
-    }
     saveTargetsToEEPROM();
   }
 
