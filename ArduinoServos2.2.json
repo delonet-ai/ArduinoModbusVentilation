@@ -5,10 +5,10 @@
     "device": {
         "name": "VentilationArduinoServo",
         "id": "arduino_modbus_slave",
-        "min_read_registers": 2,
+        "min_read_registers": 10,
         "max_read_registers": 10,
         "frame_timeout_ms": 100,
-         "guard_interval_us": 500,
+        "guard_interval_us": 500,
         "groups": [
             {
                 "title": "General",
@@ -17,10 +17,8 @@
             {
                 "title": "HW Info",
                 "id": "hw_info"
-            },
-            
+            }
         ],
-
         "parameters": {
             "baud_rate": {
                 "title": "Baud rate",
@@ -29,75 +27,31 @@
                 "reg_type": "holding",
                 "enum": [96, 192, 384, 576, 1152],
                 "default": 96,
-                "enum_titles": [
-                    "9600",
-                    "19200",
-                    "38400",
-                    "57600",
-                    "115200"
-                ],
+                "enum_titles": ["9600", "19200", "38400", "57600", "115200"],
                 "group": "general",
                 "order": 1
-            },
-            
+            }
         },
-
         "channels": [
-       
-
-            {
-                "name": "Kitchen",
-                "reg_type": "holding",
-                "address": 0,
-                "type": "range",
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Cabinet",
-                "reg_type": "holding",
-                "address": 1,
-                "type": "range",
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Badroom",
-                "reg_type": "holding",
-                "address": 2,
-                "type": "range",
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Living room",
-                "reg_type": "holding",
-                "address": 3,
-                "type": "range",
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Kid room",
-                "reg_type": "holding",
-                "address": 4,
-                "type": "range",
-                "max": 100,
-                "group": "general"
-            },
-            
-
-            
+            {"name": "Kitchen_out", "reg_type": "holding", "address": 0, "type": "range", "max": 100, "group": "general"},
+            {"name": "Cabinet_out", "reg_type": "holding", "address": 1, "type": "range", "max": 100, "group": "general"},
+            {"name": "Badroom_out", "reg_type": "holding", "address": 2, "type": "range", "max": 100, "group": "general"},
+            {"name": "Living_out", "reg_type": "holding", "address": 3, "type": "range", "max": 100, "group": "general"},
+            {"name": "Kid_out", "reg_type": "holding", "address": 4, "type": "range", "max": 100, "group": "general"},
+            {"name": "Kitchen_in", "reg_type": "holding", "address": 5, "type": "range", "max": 100, "group": "general"},
+            {"name": "Cabinet_in", "reg_type": "holding", "address": 6, "type": "range", "max": 100, "group": "general"},
+            {"name": "Badroom_in", "reg_type": "holding", "address": 7, "type": "range", "max": 100, "group": "general"},
+            {"name": "Living_in", "reg_type": "holding", "address": 8, "type": "range", "max": 100, "group": "general"},
+            {"name": "Kid_in", "reg_type": "holding", "address": 9, "type": "range", "max": 100, "group": "general"}
         ],
         "translations": {
             "en": {
                 "arduino_title": "VentilationArduinoServo",
                 "Current": "Load current"
-        },
+            },
             "ru": {
                 "General": "Общее",
-                "HW Info": "Данные модуля",
-           
+                "HW Info": "Данные модуля"
             }
         }
     }
