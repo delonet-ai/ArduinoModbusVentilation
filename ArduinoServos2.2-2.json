@@ -1,0 +1,141 @@
+{
+    "title": "VentilationArduinoServo",
+    "device_type": "arduino_modbus_servo",
+    "group": "g-diy",
+    "device": {
+        "name": "VentilationArduinoServo",
+        "id": "arduino_modbus_slave",
+        "min_read_registers": 2,
+        "max_read_registers": 10,
+        "frame_timeout_ms": 100,
+         "guard_interval_us": 500,
+        "groups": [
+            {
+                "title": "General",
+                "id": "general"
+            },
+            {
+                "title": "HW Info",
+                "id": "hw_info"
+            }
+
+        ],
+
+        "parameters": {
+            "baud_rate": {
+                "title": "Baud rate",
+                "description": "baud_rate_description",
+                "address": 110,
+                "reg_type": "holding",
+                "enum": [96, 192, 384, 576, 1152],
+                "default": 96,
+                "enum_titles": [
+                    "9600",
+                    "19200",
+                    "38400",
+                    "57600",
+                    "115200"
+                ],
+                "group": "general",
+                "order": 1
+            }
+
+        },
+
+        "channels": [
+       
+
+            {
+                "name": "Kitchen",
+                "reg_type": "holding",
+                "address": 0,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Cabinet",
+                "reg_type": "holding",
+                "address": 1,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Bedroom",
+                "reg_type": "holding",
+                "address": 2,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Living room",
+                "reg_type": "holding",
+                "address": 3,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kid room",
+                "reg_type": "holding",
+                "address": 4,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kitchen in",
+                "reg_type": "holding",
+                "address": 5,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Cabinet in",
+                "reg_type": "holding",
+                "address": 6,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Bedroom in",
+                "reg_type": "holding",
+                "address": 7,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Living room in",
+                "reg_type": "holding",
+                "address": 8,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kid room in",
+                "reg_type": "holding",
+                "address": 9,
+                "type": "range",
+                "max": 100,
+                "group": "general"
+            }
+
+        ],
+        "translations": {
+            "en": {
+                "arduino_title": "VentilationArduinoServo",
+                "Current": "Load current"
+            },
+            "ru": {
+                "General": "Общее",
+                "HW Info": "Данные модуля"
+            }
+        }
+    }
+}
