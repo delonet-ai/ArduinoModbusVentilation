@@ -7,8 +7,10 @@
         "id": "arduino_modbus_slave",
         "min_read_registers": 1,
         "max_read_registers": 11,
-        "frame_timeout_ms": 1000,
-        "guard_interval_us": 5000,
+        "response_timeout_ms": 200,
+        "frame_timeout_ms": 100,
+        "device_max_fail_cycles": 5,
+        "guard_interval_us": 500,
         "groups": [
             {
                 "title": "General",

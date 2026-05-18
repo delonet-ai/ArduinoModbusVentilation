@@ -1,5 +1,5 @@
 #include <EEPROM.h>
-#include <ModbusRtu.h>
+#include <ModbusRTU.h>
 #include <ServoSmooth.h>
 
 const uint8_t SERVO_COUNT = 10;
@@ -22,9 +22,8 @@ const uint16_t SERVO_MAX_PULSE_US = 2500;
 const uint8_t servoPins[SERVO_COUNT] = {8, 9, 10, 11, 12, A0, A1, A2, A3, A4};
 
 ServoSmooth servos[SERVO_COUNT];
-Modbus bus;
+ModbusRTU mb;
 
-uint16_t modbusRegisters[MODBUS_REGISTER_COUNT];
 uint8_t savedOpenPercent[SERVO_COUNT];
 bool wasTestModeEnabled = false;
 
@@ -53,26 +52,51 @@ void applyStoredTargets() {
 void loadTargetsFromEeprom() {
   for (uint8_t i = 0; i < SERVO_COUNT; i++) {
     savedOpenPercent[i] = clampOpenPercent(EEPROM.read(EEPROM_TARGETS_ADDRESS + i));
-    modbusRegisters[i] = savedOpenPercent[i];
   }
-
-  modbusRegisters[TEST_MODE_REGISTER] = 0;
 }
 
-void handleNormalMode() {
-  for (uint8_t i = 0; i < SERVO_COUNT; i++) {
-    uint8_t requestedOpenPercent = clampOpenPercent(modbusRegisters[i]);
+uint16_t handleServoRegisterWrite(TRegister* reg, uint16_t value) {
+  uint16_t address = reg->address.address;
 
-    if (modbusRegisters[i] != requestedOpenPercent) {
-      modbusRegisters[i] = requestedOpenPercent;
-    }
+  if (address == TEST_MODE_REGISTER) {
+    return value == 0 ? 0 : 1;
+  }
 
-    if (requestedOpenPercent != savedOpenPercent[i]) {
-      savedOpenPercent[i] = requestedOpenPercent;
-      EEPROM.update(EEPROM_TARGETS_ADDRESS + i, requestedOpenPercent);
-      setServoOpenPercent(i, requestedOpenPercent);
+  if (address >= SERVO_COUNT) {
+    return value;
+  }
+
+  uint8_t servoIndex = address;
+  uint8_t requestedOpenPercent = clampOpenPercent(value);
+
+  if (requestedOpenPercent != savedOpenPercent[servoIndex]) {
+    savedOpenPercent[servoIndex] = requestedOpenPercent;
+    EEPROM.update(EEPROM_TARGETS_ADDRESS + servoIndex, requestedOpenPercent);
+
+    if (!isTestModeEnabled()) {
+      setServoOpenPercent(servoIndex, requestedOpenPercent);
     }
   }
+
+  return requestedOpenPercent;
+}
+
+void configureModbusRegisters() {
+  mb.addHreg(0, 0, MODBUS_REGISTER_COUNT);
+
+  for (uint8_t i = 0; i < SERVO_COUNT; i++) {
+    mb.Hreg(i, savedOpenPercent[i]);
+  }
+
+  mb.Hreg(TEST_MODE_REGISTER, 0);
+  mb.onSetHreg(0, handleServoRegisterWrite, MODBUS_REGISTER_COUNT);
+}
+
+void configureModbusTransport() {
+  Serial.begin(MODBUS_BAUD_RATE, SERIAL_8N1);
+  mb.begin(&Serial, RS485_TX_ENABLE_PIN);
+  mb.setBaudrate(MODBUS_BAUD_RATE);
+  mb.slave(MODBUS_SLAVE_ID);
 }
 
 // SERVO_TEST_MODE: temporary WB-controlled test mode.
@@ -117,7 +141,7 @@ void handleServoTestMode() {
 // End SERVO_TEST_MODE.
 
 bool isTestModeEnabled() {
-  return modbusRegisters[TEST_MODE_REGISTER] != 0;
+  return mb.Hreg(TEST_MODE_REGISTER) != 0;
 }
 
 void setup() {
@@ -130,13 +154,12 @@ void setup() {
   }
 
   applyStoredTargets();
-
-  bus = Modbus(MODBUS_SLAVE_ID, 1, RS485_TX_ENABLE_PIN);
-  bus.begin(MODBUS_BAUD_RATE);
+  configureModbusRegisters();
+  configureModbusTransport();
 }
 
 void loop() {
-  bus.poll(modbusRegisters, MODBUS_REGISTER_COUNT);
+  mb.task();
 
   bool testModeEnabled = isTestModeEnabled();
 
@@ -152,11 +175,11 @@ void loop() {
 
   if (testModeEnabled) {
     handleServoTestMode();
-  } else {
-    handleNormalMode();
   }
 
   for (uint8_t i = 0; i < SERVO_COUNT; i++) {
     servos[i].tick();
   }
+
+  yield();
 }
