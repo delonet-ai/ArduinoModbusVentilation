@@ -19,8 +19,218 @@
             {
                 "title": "Test",
                 "id": "test"
+            },
+            {
+                "title": "Calibration",
+                "id": "calibration"
+            },
+            {
+                "title": "Diagnostics",
+                "id": "diagnostics"
             }
         ],
+        "parameters": {
+            "kitchen_out_closed_endpoint": {
+                "title": "Kitchen_out closed endpoint",
+                "address": 11,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 1
+            },
+            "cabinet_out_closed_endpoint": {
+                "title": "Cabinet_out closed endpoint",
+                "address": 12,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 2
+            },
+            "bedroom_out_closed_endpoint": {
+                "title": "Bedroom_out closed endpoint",
+                "address": 13,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 3
+            },
+            "living_out_closed_endpoint": {
+                "title": "Living_out closed endpoint",
+                "address": 14,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 4
+            },
+            "kid_out_closed_endpoint": {
+                "title": "Kid_out closed endpoint",
+                "address": 15,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 5
+            },
+            "kitchen_in_closed_endpoint": {
+                "title": "Kitchen_in closed endpoint",
+                "address": 16,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 6
+            },
+            "cabinet_in_closed_endpoint": {
+                "title": "Cabinet_in closed endpoint",
+                "address": 17,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 7
+            },
+            "bedroom_in_closed_endpoint": {
+                "title": "Bedroom_in closed endpoint",
+                "address": 18,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 8
+            },
+            "living_in_closed_endpoint": {
+                "title": "Living_in closed endpoint",
+                "address": 19,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 9
+            },
+            "kid_in_closed_endpoint": {
+                "title": "Kid_in closed endpoint",
+                "address": 20,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 0,
+                "group": "calibration",
+                "order": 10
+            },
+            "kitchen_out_open_endpoint": {
+                "title": "Kitchen_out open endpoint",
+                "address": 21,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 11
+            },
+            "cabinet_out_open_endpoint": {
+                "title": "Cabinet_out open endpoint",
+                "address": 22,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 12
+            },
+            "bedroom_out_open_endpoint": {
+                "title": "Bedroom_out open endpoint",
+                "address": 23,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 13
+            },
+            "living_out_open_endpoint": {
+                "title": "Living_out open endpoint",
+                "address": 24,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 14
+            },
+            "kid_out_open_endpoint": {
+                "title": "Kid_out open endpoint",
+                "address": 25,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 15
+            },
+            "kitchen_in_open_endpoint": {
+                "title": "Kitchen_in open endpoint",
+                "address": 26,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 16
+            },
+            "cabinet_in_open_endpoint": {
+                "title": "Cabinet_in open endpoint",
+                "address": 27,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 17
+            },
+            "bedroom_in_open_endpoint": {
+                "title": "Bedroom_in open endpoint",
+                "address": 28,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 18
+            },
+            "living_in_open_endpoint": {
+                "title": "Living_in open endpoint",
+                "address": 29,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 19
+            },
+            "kid_in_open_endpoint": {
+                "title": "Kid_in open endpoint",
+                "address": 30,
+                "reg_type": "holding",
+                "min": 0,
+                "max": 100,
+                "default": 100,
+                "group": "calibration",
+                "order": 20
+            }
+        },
         "channels": [
             {
                 "name": "Kitchen_out",
@@ -118,16 +328,38 @@
                 "address": 10,
                 "type": "switch",
                 "group": "test"
+            },
+            {
+                "name": "Uptime High",
+                "reg_type": "input",
+                "address": 100,
+                "type": "value",
+                "format": "u16",
+                "readonly": true,
+                "group": "diagnostics"
+            },
+            {
+                "name": "Uptime Low",
+                "reg_type": "input",
+                "address": 101,
+                "type": "value",
+                "format": "u16",
+                "readonly": true,
+                "group": "diagnostics"
             }
         ],
         "translations": {
             "en": {
                 "General": "General",
-                "Test": "Test"
+                "Test": "Test",
+                "Calibration": "Calibration",
+                "Diagnostics": "Diagnostics"
             },
             "ru": {
                 "General": "General",
-                "Test": "Test"
+                "Test": "Test",
+                "Calibration": "Calibration",
+                "Diagnostics": "Diagnostics"
             }
         }
     }
