@@ -1,318 +1,132 @@
 {
-    "title":  "VentilationArduinoServo",
-    "device_type":  "arduino_modbus_servo",
-    "group":  "g-diy",
-    "device":  {
-                   "name":  "VentilationArduinoServo",
-                   "id":  "arduino_modbus_slave",
-                   "min_read_registers":  1,
-                   "max_read_registers":  11,
-                   "frame_timeout_ms":  100,
-                   "guard_interval_us":  500,
-                   "groups":  [
-                                  {
-                                      "title":  "General",
-                                      "id":  "general"
-                                  },
-                                  {
-                                      "title":  "Calibration",
-                                      "id":  "calibration"
-                                  },
-                                  {
-                                      "title":  "Test",
-                                      "id":  "test"
-                                  }
-                              ],
-                   "channels":  [
-                                    {
-                                        "name":  "Kitchen_out",
-                                        "reg_type":  "holding",
-                                        "address":  0,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Cabinet_out",
-                                        "reg_type":  "holding",
-                                        "address":  1,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Bedroom_out",
-                                        "reg_type":  "holding",
-                                        "address":  2,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Living_out",
-                                        "reg_type":  "holding",
-                                        "address":  3,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Kid_out",
-                                        "reg_type":  "holding",
-                                        "address":  4,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Kitchen_in",
-                                        "reg_type":  "holding",
-                                        "address":  5,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Cabinet_in",
-                                        "reg_type":  "holding",
-                                        "address":  6,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Bedroom_in",
-                                        "reg_type":  "holding",
-                                        "address":  7,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Living_in",
-                                        "reg_type":  "holding",
-                                        "address":  8,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Kid_in",
-                                        "reg_type":  "holding",
-                                        "address":  9,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "general"
-                                    },
-                                    {
-                                        "name":  "Test Mode",
-                                        "reg_type":  "holding",
-                                        "address":  10,
-                                        "type":  "switch",
-                                        "group":  "test"
-                                    },
-                                    {
-                                        "name":  "Kitchen_out closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  11,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Cabinet_out closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  12,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Bedroom_out closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  13,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Living_out closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  14,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kid_out closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  15,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kitchen_in closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  16,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Cabinet_in closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  17,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Bedroom_in closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  18,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Living_in closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  19,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kid_in closed endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  20,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kitchen_out open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  32,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Cabinet_out open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  33,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Bedroom_out open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  34,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Living_out open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  35,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kid_out open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  36,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kitchen_in open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  37,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Cabinet_in open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  38,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Bedroom_in open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  39,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Living_in open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  40,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    },
-                                    {
-                                        "name":  "Kid_in open endpoint",
-                                        "reg_type":  "holding",
-                                        "address":  41,
-                                        "type":  "range",
-                                        "min":  0,
-                                        "max":  100,
-                                        "group":  "calibration"
-                                    }
-                                ],
-                   "translations":  {
-                                        "en":  {
-                                                   "General":  "General",
-                                                   "Calibration":  "Calibration",
-                                                   "Test":  "Test"
-                                               },
-                                        "ru":  {
-                                                   "General":  "General",
-                                                   "Calibration":  "Calibration",
-                                                   "Test":  "Test"
-                                               }
-                                    }
-               }
+    "title": "VentilationArduinoServo",
+    "device_type": "arduino_modbus_servo",
+    "group": "g-diy",
+    "device": {
+        "name": "VentilationArduinoServo",
+        "id": "arduino_modbus_slave",
+        "min_read_registers": 1,
+        "max_read_registers": 11,
+        "frame_timeout_ms": 1000,
+        "guard_interval_us": 5000,
+        "groups": [
+            {
+                "title": "General",
+                "id": "general"
+            },
+            {
+                "title": "Test",
+                "id": "test"
+            }
+        ],
+        "channels": [
+            {
+                "name": "Kitchen_out",
+                "reg_type": "holding",
+                "address": 0,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Cabinet_out",
+                "reg_type": "holding",
+                "address": 1,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Bedroom_out",
+                "reg_type": "holding",
+                "address": 2,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Living_out",
+                "reg_type": "holding",
+                "address": 3,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kid_out",
+                "reg_type": "holding",
+                "address": 4,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kitchen_in",
+                "reg_type": "holding",
+                "address": 5,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Cabinet_in",
+                "reg_type": "holding",
+                "address": 6,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Bedroom_in",
+                "reg_type": "holding",
+                "address": 7,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Living_in",
+                "reg_type": "holding",
+                "address": 8,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Kid_in",
+                "reg_type": "holding",
+                "address": 9,
+                "type": "range",
+                "min": 0,
+                "max": 100,
+                "group": "general"
+            },
+            {
+                "name": "Test Mode",
+                "reg_type": "holding",
+                "address": 10,
+                "type": "switch",
+                "group": "test"
+            }
+        ],
+        "translations": {
+            "en": {
+                "General": "General",
+                "Test": "Test"
+            },
+            "ru": {
+                "General": "General",
+                "Test": "Test"
+            }
+        }
+    }
 }
