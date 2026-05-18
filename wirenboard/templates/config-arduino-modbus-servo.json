@@ -7,17 +7,43 @@
         "id": "arduino_modbus_slave",
         "min_read_registers": 1,
         "max_read_registers": 11,
-        "frame_timeout_ms": 1000,
-        "guard_interval_us": 5000,
+        "frame_timeout_ms": 100,
+        "guard_interval_us": 500,
         "groups": [
             {
                 "title": "General",
                 "id": "general"
             },
             {
+                "title": "Calibration",
+                "id": "calibration"
+            },
+            {
                 "title": "Test",
                 "id": "test"
             }
+        ],
+        "parameters": [
+            {"id": "kitchen_out_closed_endpoint", "title": "Kitchen_out closed endpoint", "address": 11, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 1},
+            {"id": "cabinet_out_closed_endpoint", "title": "Cabinet_out closed endpoint", "address": 12, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 2},
+            {"id": "bedroom_out_closed_endpoint", "title": "Bedroom_out closed endpoint", "address": 13, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 3},
+            {"id": "living_out_closed_endpoint", "title": "Living_out closed endpoint", "address": 14, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 4},
+            {"id": "kid_out_closed_endpoint", "title": "Kid_out closed endpoint", "address": 15, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 5},
+            {"id": "kitchen_in_closed_endpoint", "title": "Kitchen_in closed endpoint", "address": 16, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 6},
+            {"id": "cabinet_in_closed_endpoint", "title": "Cabinet_in closed endpoint", "address": 17, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 7},
+            {"id": "bedroom_in_closed_endpoint", "title": "Bedroom_in closed endpoint", "address": 18, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 8},
+            {"id": "living_in_closed_endpoint", "title": "Living_in closed endpoint", "address": 19, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 9},
+            {"id": "kid_in_closed_endpoint", "title": "Kid_in closed endpoint", "address": 20, "reg_type": "holding", "default": 0, "min": 0, "max": 100, "group": "calibration", "order": 10},
+            {"id": "kitchen_out_open_endpoint", "title": "Kitchen_out open endpoint", "address": 21, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 11},
+            {"id": "cabinet_out_open_endpoint", "title": "Cabinet_out open endpoint", "address": 22, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 12},
+            {"id": "bedroom_out_open_endpoint", "title": "Bedroom_out open endpoint", "address": 23, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 13},
+            {"id": "living_out_open_endpoint", "title": "Living_out open endpoint", "address": 24, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 14},
+            {"id": "kid_out_open_endpoint", "title": "Kid_out open endpoint", "address": 25, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 15},
+            {"id": "kitchen_in_open_endpoint", "title": "Kitchen_in open endpoint", "address": 26, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 16},
+            {"id": "cabinet_in_open_endpoint", "title": "Cabinet_in open endpoint", "address": 27, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 17},
+            {"id": "bedroom_in_open_endpoint", "title": "Bedroom_in open endpoint", "address": 28, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 18},
+            {"id": "living_in_open_endpoint", "title": "Living_in open endpoint", "address": 29, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 19},
+            {"id": "kid_in_open_endpoint", "title": "Kid_in open endpoint", "address": 30, "reg_type": "holding", "default": 100, "min": 0, "max": 100, "group": "calibration", "order": 20}
         ],
         "channels": [
             {
@@ -121,10 +147,12 @@
         "translations": {
             "en": {
                 "General": "General",
+                "Calibration": "Calibration",
                 "Test": "Test"
             },
             "ru": {
                 "General": "General",
+                "Calibration": "Calibration",
                 "Test": "Test"
             }
         }
