@@ -128,8 +128,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Cabinet_out closed endpoint",
@@ -138,8 +137,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Bedroom_out closed endpoint",
@@ -148,8 +146,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Living_out closed endpoint",
@@ -158,8 +155,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kid_out closed endpoint",
@@ -168,8 +164,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kitchen_in closed endpoint",
@@ -178,8 +173,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Cabinet_in closed endpoint",
@@ -188,8 +182,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Bedroom_in closed endpoint",
@@ -198,8 +191,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Living_in closed endpoint",
@@ -208,8 +200,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kid_in closed endpoint",
@@ -218,8 +209,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kitchen_out open endpoint",
@@ -228,8 +218,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Cabinet_out open endpoint",
@@ -238,8 +227,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Bedroom_out open endpoint",
@@ -248,8 +236,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Living_out open endpoint",
@@ -258,8 +245,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kid_out open endpoint",
@@ -268,8 +254,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kitchen_in open endpoint",
@@ -278,8 +263,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Cabinet_in open endpoint",
@@ -288,8 +272,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Bedroom_in open endpoint",
@@ -298,8 +281,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Living_in open endpoint",
@@ -308,8 +290,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     },
                                     {
                                         "name":  "Kid_in open endpoint",
@@ -318,8 +299,7 @@
                                         "type":  "range",
                                         "min":  0,
                                         "max":  100,
-                                        "group":  "calibration",
-                                        "sporadic":  true
+                                        "group":  "calibration"
                                     }
                                 ],
                    "translations":  {
