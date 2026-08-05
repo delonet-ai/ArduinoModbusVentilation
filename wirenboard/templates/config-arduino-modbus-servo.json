@@ -7,7 +7,7 @@
         "id": "arduino_modbus_slave",
         "min_read_registers": 1,
         "max_read_registers": 11,
-        "frame_timeout_ms": 1000,
+        "frame_timeout_ms": 100,
         "guard_interval_us": 5000,
         "groups": [
             {
