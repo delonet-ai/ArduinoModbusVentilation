@@ -1,33 +1,29 @@
 #include <ModbusRtu.h>
 
+#include "AirflowGuard.h"
 #include "HardwareConfig.h"
 #include "PersistentTargets.h"
 #include "ServoBank.h"
 
-constexpr uint8_t TEST_MODE_REGISTER = HardwareConfig::kServoCount;
-constexpr uint8_t MODBUS_REGISTER_COUNT = HardwareConfig::kServoCount + 1;
-constexpr uint16_t TEST_ENDPOINT_HOLD_MS = 250;
-
-enum class TestState : uint8_t {
-  Idle,
-  PreparingZero,
-  Opening,
-  HoldingOpen,
-  Closing,
-  HoldingClosed,
-};
+constexpr uint8_t ROOM_REGISTER_START = 0;
+constexpr uint8_t APPLIED_REGISTER_START = 5;
+constexpr uint8_t EXHAUST_TOTAL_REGISTER = 15;
+constexpr uint8_t SUPPLY_TOTAL_REGISTER = 16;
+constexpr uint8_t SAFETY_FLAGS_REGISTER = 17;
+constexpr uint8_t CONTROLLER_READY_REGISTER = 18;
+constexpr uint8_t FIREPLACE_MODE_REGISTER = 19;
+constexpr uint8_t MODBUS_REGISTER_COUNT = 20;
 
 Modbus bus(HardwareConfig::kModbusSlaveId, Serial, HardwareConfig::kRs485TxEnablePin);
 ServoBank servoBank;
 PersistentTargets persistentTargets;
 
 uint16_t modbusRegisters[MODBUS_REGISTER_COUNT] = {};
+uint8_t roomOpenPercent[AirflowGuard::kRoomCount] = {};
 uint8_t savedOpenPercent[HardwareConfig::kServoCount] = {};
-uint8_t testSnapshot[HardwareConfig::kServoCount] = {};
-
-TestState testState = TestState::Idle;
-uint8_t testServoIndex = 0;
-unsigned long testStateStartedAt = 0;
+uint8_t appliedOpenPercent[HardwareConfig::kServoCount] = {};
+AirflowGuard::Result airflowResult = {};
+bool fireplaceModeEnabled = false;
 
 uint8_t clampOpenPercent(uint16_t value) {
   return value > HardwareConfig::kMaxOpenPercent
@@ -35,126 +31,94 @@ uint8_t clampOpenPercent(uint16_t value) {
              : static_cast<uint8_t>(value);
 }
 
-bool isTestModeEnabled() {
-  return modbusRegisters[TEST_MODE_REGISTER] != 0;
+void copyRoomsToPhysicalTargets() {
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    savedOpenPercent[i] = roomOpenPercent[i];
+    savedOpenPercent[i + AirflowGuard::kRoomCount] = roomOpenPercent[i];
+  }
 }
 
-void enterTestMode() {
-  bool targetsChanged = false;
+void updateAppliedTargets() {
+  uint8_t nextApplied[HardwareConfig::kServoCount];
+  airflowResult =
+      AirflowGuard::apply(savedOpenPercent, fireplaceModeEnabled, nextApplied);
 
   for (uint8_t i = 0; i < HardwareConfig::kServoCount; ++i) {
-    const uint8_t snapshotValue = clampOpenPercent(modbusRegisters[i]);
-    modbusRegisters[i] = snapshotValue;
-    testSnapshot[i] = snapshotValue;
-
-    if (savedOpenPercent[i] != snapshotValue) {
-      savedOpenPercent[i] = snapshotValue;
-      targetsChanged = true;
+    if (nextApplied[i] != appliedOpenPercent[i]) {
+      appliedOpenPercent[i] = nextApplied[i];
+      servoBank.setTargetPercent(i, appliedOpenPercent[i]);
     }
-
-    servoBank.setTargetPercent(i, HardwareConfig::kMinOpenPercent);
   }
-
-  if (targetsChanged) {
-    persistentTargets.scheduleSave(savedOpenPercent);
-  }
-
-  modbusRegisters[TEST_MODE_REGISTER] = 1;
-  testServoIndex = 0;
-  testState = TestState::PreparingZero;
 }
 
-void exitTestMode() {
+void publishRegisters() {
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    modbusRegisters[ROOM_REGISTER_START + i] = roomOpenPercent[i];
+  }
   for (uint8_t i = 0; i < HardwareConfig::kServoCount; ++i) {
-    modbusRegisters[i] = testSnapshot[i];
-    savedOpenPercent[i] = testSnapshot[i];
-    servoBank.setTargetPercent(i, testSnapshot[i]);
+    modbusRegisters[APPLIED_REGISTER_START + i] = appliedOpenPercent[i];
   }
-
-  modbusRegisters[TEST_MODE_REGISTER] = 0;
-  testState = TestState::Idle;
+  modbusRegisters[EXHAUST_TOTAL_REGISTER] = airflowResult.exhaustTotal;
+  modbusRegisters[SUPPLY_TOTAL_REGISTER] = airflowResult.supplyTotal;
+  modbusRegisters[SAFETY_FLAGS_REGISTER] = airflowResult.flags;
+  modbusRegisters[CONTROLLER_READY_REGISTER] = servoBank.isReady() ? 1 : 0;
 }
 
-void preserveTestSnapshotInRegisters() {
-  for (uint8_t i = 0; i < HardwareConfig::kServoCount; ++i) {
-    modbusRegisters[i] = testSnapshot[i];
+void handleCommands() {
+  uint8_t requestedRooms[AirflowGuard::kRoomCount];
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    requestedRooms[i] = clampOpenPercent(modbusRegisters[ROOM_REGISTER_START + i]);
   }
-  modbusRegisters[TEST_MODE_REGISTER] = 1;
-}
+  AirflowGuard::normalizeRoomTargets(requestedRooms);
 
-void handleTestMode() {
-  const unsigned long now = millis();
-
-  switch (testState) {
-    case TestState::PreparingZero:
-      if (servoBank.areAllAtTarget()) {
-        servoBank.setTargetPercent(testServoIndex, HardwareConfig::kMaxOpenPercent);
-        testState = TestState::Opening;
-      }
-      break;
-
-    case TestState::Opening:
-      if (servoBank.isChannelAtTarget(testServoIndex)) {
-        testStateStartedAt = now;
-        testState = TestState::HoldingOpen;
-      }
-      break;
-
-    case TestState::HoldingOpen:
-      if (static_cast<unsigned long>(now - testStateStartedAt) >= TEST_ENDPOINT_HOLD_MS) {
-        servoBank.setTargetPercent(testServoIndex, HardwareConfig::kMinOpenPercent);
-        testState = TestState::Closing;
-      }
-      break;
-
-    case TestState::Closing:
-      if (servoBank.isChannelAtTarget(testServoIndex)) {
-        testStateStartedAt = now;
-        testState = TestState::HoldingClosed;
-      }
-      break;
-
-    case TestState::HoldingClosed:
-      if (static_cast<unsigned long>(now - testStateStartedAt) >= TEST_ENDPOINT_HOLD_MS) {
-        testServoIndex = (testServoIndex + 1) % HardwareConfig::kServoCount;
-        servoBank.setTargetPercent(testServoIndex, HardwareConfig::kMaxOpenPercent);
-        testState = TestState::Opening;
-      }
-      break;
-
-    case TestState::Idle:
-      break;
-  }
-}
-
-void handleNormalMode() {
   bool targetsChanged = false;
-
-  for (uint8_t i = 0; i < HardwareConfig::kServoCount; ++i) {
-    const uint8_t requestedOpenPercent = clampOpenPercent(modbusRegisters[i]);
-    modbusRegisters[i] = requestedOpenPercent;
-
-    if (requestedOpenPercent != savedOpenPercent[i]) {
-      savedOpenPercent[i] = requestedOpenPercent;
-      servoBank.setTargetPercent(i, requestedOpenPercent);
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    if (requestedRooms[i] != roomOpenPercent[i]) {
+      roomOpenPercent[i] = requestedRooms[i];
       targetsChanged = true;
     }
   }
 
   if (targetsChanged) {
+    copyRoomsToPhysicalTargets();
     persistentTargets.scheduleSave(savedOpenPercent);
+  }
+
+  const bool requestedFireplaceMode = modbusRegisters[FIREPLACE_MODE_REGISTER] != 0;
+  modbusRegisters[FIREPLACE_MODE_REGISTER] = requestedFireplaceMode ? 1 : 0;
+  const bool fireplaceModeChanged = requestedFireplaceMode != fireplaceModeEnabled;
+  fireplaceModeEnabled = requestedFireplaceMode;
+
+  if (targetsChanged || fireplaceModeChanged) {
+    updateAppliedTargets();
   }
 }
 
 void setup() {
   persistentTargets.begin(savedOpenPercent);
 
-  for (uint8_t i = 0; i < HardwareConfig::kServoCount; ++i) {
-    modbusRegisters[i] = savedOpenPercent[i];
+  bool migratedTargets = false;
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    roomOpenPercent[i] = max(savedOpenPercent[i],
+                             savedOpenPercent[i + AirflowGuard::kRoomCount]);
   }
-  modbusRegisters[TEST_MODE_REGISTER] = 0;
+  AirflowGuard::normalizeRoomTargets(roomOpenPercent);
 
-  servoBank.begin(savedOpenPercent);
+  for (uint8_t i = 0; i < AirflowGuard::kRoomCount; ++i) {
+    if (savedOpenPercent[i] != roomOpenPercent[i] ||
+        savedOpenPercent[i + AirflowGuard::kRoomCount] != roomOpenPercent[i]) {
+      migratedTargets = true;
+    }
+  }
+  copyRoomsToPhysicalTargets();
+  if (migratedTargets) {
+    persistentTargets.scheduleSave(savedOpenPercent);
+  }
+
+  modbusRegisters[FIREPLACE_MODE_REGISTER] = 0;
+  airflowResult = AirflowGuard::apply(savedOpenPercent, false, appliedOpenPercent);
+  servoBank.begin(appliedOpenPercent);
+  publishRegisters();
 
   Serial.begin(HardwareConfig::kModbusBaudRate, SERIAL_8N1);
   bus.start();
@@ -162,23 +126,8 @@ void setup() {
 
 void loop() {
   bus.poll(modbusRegisters, MODBUS_REGISTER_COUNT);
-
-  const bool requestedTestMode = isTestModeEnabled();
-  const bool testModeActive = testState != TestState::Idle;
-
-  if (requestedTestMode && !testModeActive) {
-    enterTestMode();
-  } else if (!requestedTestMode && testModeActive) {
-    exitTestMode();
-  }
-
-  if (testState != TestState::Idle) {
-    preserveTestSnapshotInRegisters();
-    handleTestMode();
-  } else {
-    handleNormalMode();
-  }
-
+  handleCommands();
   servoBank.tick();
+  publishRegisters();
   persistentTargets.tick();
 }

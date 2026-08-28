@@ -7,8 +7,8 @@ const uint8_t kPca9685Channels[kServoCount] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 // Tune these per channel only from the servo datasheet and bench measurements.
 const uint16_t kServoMinPulseUs[kServoCount] = {
-    500, 500, 500, 500, 500, 500, 500, 500, 500, 500};
+    400, 400, 400, 400, 400, 400, 400, 400, 400, 400};
 const uint16_t kServoMaxPulseUs[kServoCount] = {
-    2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400};
+    2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500};
 
 }  // namespace HardwareConfig

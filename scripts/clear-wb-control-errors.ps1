@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 $plink = "C:\Program Files\PuTTY\plink.exe"
 $remoteScript = @"
 import subprocess
-controls = ['Kitchen_out','Cabinet_out','Bedroom_out','Living_out','Kid_out','Kitchen_in','Cabinet_in','Bedroom_in','Living_in','Kid_in','Test Mode']
+controls = ['Kitchen','Cabinet','Bedroom','Living','Kid','Exhaust_total','Supply_total','Controller_ready','Fireplace_mode']
 for control in controls:
     subprocess.run(['mosquitto_pub', '-r', '-n', '-t', f'/devices/$DeviceId/controls/{control}/meta/error'], check=True)
 print('control errors cleared')

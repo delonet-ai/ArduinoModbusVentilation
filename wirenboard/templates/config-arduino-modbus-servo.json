@@ -1,131 +1,132 @@
 {
-    "title": "VentilationArduinoServo",
+    "title": "Arduino ventilation controller",
     "device_type": "arduino_modbus_servo",
     "group": "g-diy",
     "device": {
-        "name": "VentilationArduinoServo",
+        "name": "Вентиляция",
         "id": "arduino_modbus_slave",
         "min_read_registers": 1,
-        "max_read_registers": 11,
+        "max_read_registers": 20,
         "frame_timeout_ms": 100,
         "guard_interval_us": 5000,
         "groups": [
             {
-                "title": "General",
-                "id": "general"
+                "title": "Modes",
+                "id": "modes"
             },
             {
-                "title": "Test",
-                "id": "test"
+                "title": "Rooms",
+                "id": "rooms"
+            },
+            {
+                "title": "Status",
+                "id": "status"
             }
         ],
         "channels": [
             {
-                "name": "Kitchen_out",
+                "name": "Fireplace_mode",
+                "reg_type": "holding",
+                "address": 19,
+                "type": "switch",
+                "group": "modes"
+            },
+            {
+                "name": "Kitchen",
                 "reg_type": "holding",
                 "address": 0,
                 "type": "range",
                 "min": 0,
                 "max": 100,
-                "group": "general"
+                "units": "%",
+                "group": "rooms"
             },
             {
-                "name": "Cabinet_out",
+                "name": "Cabinet",
                 "reg_type": "holding",
                 "address": 1,
                 "type": "range",
                 "min": 0,
                 "max": 100,
-                "group": "general"
+                "units": "%",
+                "group": "rooms"
             },
             {
-                "name": "Bedroom_out",
+                "name": "Bedroom",
                 "reg_type": "holding",
                 "address": 2,
                 "type": "range",
                 "min": 0,
                 "max": 100,
-                "group": "general"
+                "units": "%",
+                "group": "rooms"
             },
             {
-                "name": "Living_out",
+                "name": "Living",
                 "reg_type": "holding",
                 "address": 3,
                 "type": "range",
                 "min": 0,
                 "max": 100,
-                "group": "general"
+                "units": "%",
+                "group": "rooms"
             },
             {
-                "name": "Kid_out",
+                "name": "Kid",
                 "reg_type": "holding",
                 "address": 4,
                 "type": "range",
                 "min": 0,
                 "max": 100,
-                "group": "general"
+                "units": "%",
+                "group": "rooms"
             },
             {
-                "name": "Kitchen_in",
+                "name": "Exhaust_total",
                 "reg_type": "holding",
-                "address": 5,
-                "type": "range",
-                "min": 0,
-                "max": 100,
-                "group": "general"
+                "address": 15,
+                "type": "value",
+                "readonly": true,
+                "units": "%",
+                "group": "status"
             },
             {
-                "name": "Cabinet_in",
+                "name": "Supply_total",
                 "reg_type": "holding",
-                "address": 6,
-                "type": "range",
-                "min": 0,
-                "max": 100,
-                "group": "general"
+                "address": 16,
+                "type": "value",
+                "readonly": true,
+                "units": "%",
+                "group": "status"
             },
             {
-                "name": "Bedroom_in",
+                "name": "Controller_ready",
                 "reg_type": "holding",
-                "address": 7,
-                "type": "range",
-                "min": 0,
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Living_in",
-                "reg_type": "holding",
-                "address": 8,
-                "type": "range",
-                "min": 0,
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Kid_in",
-                "reg_type": "holding",
-                "address": 9,
-                "type": "range",
-                "min": 0,
-                "max": 100,
-                "group": "general"
-            },
-            {
-                "name": "Test Mode",
-                "reg_type": "holding",
-                "address": 10,
+                "address": 18,
                 "type": "switch",
-                "group": "test"
+                "readonly": true,
+                "group": "status"
             }
         ],
         "translations": {
             "en": {
-                "General": "General",
-                "Test": "Test"
+                "Modes": "Modes",
+                "Rooms": "Rooms",
+                "Status": "Status"
             },
             "ru": {
-                "General": "General",
-                "Test": "Test"
+                "Modes": "Режимы",
+                "Rooms": "Комнаты",
+                "Status": "Состояние",
+                "Fireplace_mode": "Режим камина",
+                "Kitchen": "Кухня",
+                "Cabinet": "Кабинет",
+                "Bedroom": "Спальня",
+                "Living": "Гостиная",
+                "Kid": "Детская",
+                "Exhaust_total": "Сумма вытяжки",
+                "Supply_total": "Сумма притока",
+                "Controller_ready": "PCA9685 готов"
             }
         }
     }
